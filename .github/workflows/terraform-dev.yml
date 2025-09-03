@@ -1,0 +1,44 @@
+name: Terraform Dev Deployment
+
+on:
+  push:
+    branches:
+      - master   # jab bhi main branch me push hoga
+  workflow_dispatch: # manually bhi trigger kar sakte ho
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout repo
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Setup Terraform
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.7.5   # apna Terraform version daal do
+
+      # Step 3: Login to Azure (Service Principal se)
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Step 4: Terraform Init
+      - name: Terraform Init
+        working-directory: ./environments/dev
+        run: terraform init
+
+      # Step 5: Terraform Plan
+      - name: Terraform Plan
+        working-directory: ./environments/dev
+        run: terraform plan -out=tfplan
+
+      # Step 6: Terraform Apply
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main'
+        working-directory: ./environments/dev
+        run: terraform apply -auto-approve tfplan
