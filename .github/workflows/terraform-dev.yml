@@ -8,7 +8,7 @@ on:
 
 jobs:
   terraform:
-    runs-on: chacha-runner
+    runs-on:  [self-hosted, Windows, X64, chacha-runner]
 
     steps:
       # Step 1: Checkout repo
