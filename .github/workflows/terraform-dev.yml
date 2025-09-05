@@ -9,6 +9,9 @@ on:
 jobs:
   terraform:
     runs-on:  ubuntu-latest
+    permissions:
+      id-token: write       # ✅ Manual likha gaya
+      contents: read
     steps:
       # Step 1: Checkout repo
       - name: Checkout code
