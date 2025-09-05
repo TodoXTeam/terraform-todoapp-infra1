@@ -33,16 +33,16 @@ jobs:
 
       # Step 4: Terraform Init
       - name: Terraform Init
-        working-directory: ./environments/dev
+        working-directory: ./enviroments/dev
         run: terraform init
 
       # Step 5: Terraform Plan
       - name: Terraform Plan
-        working-directory: ./environments/dev
+        working-directory: ./enviroments/dev
         run: terraform plan -out=tfplan
 
       # Step 6: Terraform Apply
       - name: Terraform Apply
         if: github.ref == 'refs/heads/master'
-        working-directory: ./environments/dev
+        working-directory: ./enviroments/dev
         run: terraform apply -auto-approve tfplan
