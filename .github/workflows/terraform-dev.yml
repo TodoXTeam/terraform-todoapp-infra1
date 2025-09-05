@@ -24,9 +24,9 @@ jobs:
       - name: Azure Login (OIDC)
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          client-id: 951fb212-6434-4115-9b51-7b84d682565b
+          tenant-id: de80a58f-1610-4908-a1a7-862be272a38c
+          subscription-id: 0f48ce1f-16d2-42ba-8b4f-0bef1a58b563
 
       # Step 4: Terraform Init
       - name: Terraform Init
