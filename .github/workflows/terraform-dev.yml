@@ -1,12 +1,16 @@
 name: Terraform Dev Deployment
 
 on:
+  workflow_dispatch:       # 👈 Manual run allow karega
   pull_request:
     branches:
       - main
+      - 'feature/*'        # 👈 PRs from feature branches
   push:
     branches:
-      - main      
+      - main
+      - 'feature/*'        # 👈 feature branches ke push pe bhi run hoga
+    
 
 permissions:
   id-token: write
