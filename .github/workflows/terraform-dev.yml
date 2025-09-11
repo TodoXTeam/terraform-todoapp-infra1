@@ -4,12 +4,13 @@ on:
   workflow_dispatch:       # Manual trigger
   pull_request:
     branches:
-      - main
+      - master
       - 'feature/*'
   push:
     branches:
-      - main      
-    - feature/*
+      - master
+      - 'feature/*'
+
 permissions:
   id-token: write 
   contents: read
@@ -67,6 +68,4 @@ jobs:
         working-directory: ./environments/dev
 
       - name: Terraform Apply
-        run: terraform apply --auto-approve
-        continue-on-error: true
-        working-directory: ./environments/dev
+        run: terraform apply --
