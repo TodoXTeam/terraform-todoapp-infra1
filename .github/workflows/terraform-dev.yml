@@ -1,16 +1,15 @@
 name: Terraform Dev Deployment
 
 on:
-  workflow_dispatch:       # 👈 Manual run allow karega
+  workflow_dispatch:       # Manual trigger
   pull_request:
     branches:
       - main
-      - 'feature/*'        # 👈 PRs from feature branches
+      - 'feature/*'
   push:
     branches:
       - main
-      - 'feature/*'        # 👈 feature branches ke push pe bhi run hoga
-    
+      - 'feature/*'
 
 permissions:
   id-token: write
@@ -32,31 +31,27 @@ jobs:
           subscription-id: 0f48ce1f-16d2-42ba-8b4f-0bef1a58b563
 
       - name: Terraform fmt
-        id: fmt
         run: terraform fmt -check
-        continue-on-error: true
-        working-directory: ././enviroments/dev
+        working-directory: ./environments/dev
         
       - name: Terraform Init
-        id: init
         run: terraform init -input=false  
-        working-directory: ./enviroments/dev
+        working-directory: ./environments/dev
+
       - name: Terraform Validate
-        id: validate
         run: terraform validate -no-color
-        working-directory: ./enviroments/dev
+        working-directory: ./environments/dev
 
       - name: Terraform Plan
-        id: plan
         run: terraform plan -no-color -input=false
-        continue-on-error: true
-        working-directory: ./enviroments/dev
+        working-directory: ./environments/dev
         
   terraform-apply:    
-    runs-on: self-hosted
+    runs-on: [self-hosted, Windows, X64, chacha-runner]
     if: github.ref == 'refs/heads/main'
     needs: terraform-init-plan
     environment: dev
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v5.0.0
@@ -69,12 +64,10 @@ jobs:
           subscription-id: 1075ec7a-b17a-4f37-bf3f-9d68c4506dc1   
           
       - name: Terraform Init
-        id: init
         run: terraform init -input=false  
         working-directory: ./environments/dev
 
       - name: Terraform Apply
-        id: apply
         run: terraform apply --auto-approve
         continue-on-error: true
         working-directory: ./environments/dev
