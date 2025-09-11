@@ -8,11 +8,10 @@ on:
       - 'feature/*'
   push:
     branches:
-      - main
-      - 'feature/*'
-
+      - main      
+    - feature/*
 permissions:
-  id-token: write
+  id-token: write 
   contents: read
   
 jobs: 
