@@ -4,11 +4,11 @@ on:
   workflow_dispatch:       # Manual trigger
   pull_request:
     branches:
-      - main
+      - master
       - 'feature/*'
   push:
     branches:
-      - main
+      - master
       - 'feature/*'
 
 permissions:
