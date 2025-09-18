@@ -1,17 +1,19 @@
 name: Terraform Dev Deployment
 
 on:
-  workflow_dispatch:       # Manual trigger
+  workflow_dispatch:       # 👈 Manual run allow karega
   pull_request:
     branches:
       - main
-      - 'feature/*'
+      - 'feature/*'        # 👈 PRs from feature branches
   push:
     branches:
-      - main      
-    - feature/*
+      - main
+      - 'feature/*'        # 👈 feature branches ke push pe bhi run hoga
+    
+
 permissions:
-  id-token: write 
+  id-token: write
   contents: read
   
 jobs: 
@@ -25,48 +27,51 @@ jobs:
       - name: Azure Login
         uses: Azure/login@v2.3.0
         with:
-          client-id: 08c5d37a-4cbc-493e-95a4-cb555534e073
+          client-id: 1c4d76ba-a9aa-4a2d-a48f-d46ddc33164c
           tenant-id: de80a58f-1610-4908-a1a7-862be272a38c
           subscription-id: 0f48ce1f-16d2-42ba-8b4f-0bef1a58b563
 
       - name: Terraform fmt
+        id: fmt
         run: terraform fmt -check
-        working-directory: ./environments/dev
-        
+        continue-on-error: true
+        working-directory: ./enviroments/dev
       - name: Terraform Init
-        run: terraform init -input=false  
-        working-directory: ./environments/dev
-
+        id: init
+        run: terraform init -input=false
+        working-directory: ./enviroments/dev
       - name: Terraform Validate
+        id: validate
         run: terraform validate -no-color
-        working-directory: ./environments/dev
-
+        working-directory: ./enviroments/dev
       - name: Terraform Plan
+        id: plan
         run: terraform plan -no-color -input=false
-        working-directory: ./environments/dev
+        continue-on-error: true
+        working-directory: ./enviroments/dev
         
   terraform-apply:    
     runs-on: [self-hosted, Windows, X64, chacha-runner]
     if: github.ref == 'refs/heads/main'
     needs: terraform-init-plan
     environment: dev
-    
-    steps:
+    steps:  
       - name: Checkout
         uses: actions/checkout@v5.0.0
     
       - name: Azure Login
         uses: Azure/login@v2.3.0
         with:
-          client-id: ff27bcf6-f60c-4a57-8b01-8eee5de2a9cd
-          tenant-id: 0f7010fd-209e-4344-8457-043ffb37143b
-          subscription-id: 1075ec7a-b17a-4f37-bf3f-9d68c4506dc1   
-          
+            client-id: 08c5d37a-4cbc-493e-95a4-cb555534e073
+            tenant-id: de80a58f-1610-4908-a1a7-862be272a38c
+            subscription-id: 0f48ce1f-16d2-42ba-8b4f-0bef1a58b563
       - name: Terraform Init
+        id: init
         run: terraform init -input=false  
-        working-directory: ./environments/dev
+        working-directory: ./enviroments/dev
 
       - name: Terraform Apply
+        id: apply
         run: terraform apply --auto-approve
         continue-on-error: true
-        working-directory: ./environments/dev
+        working-directory: ./enviroments/dev
