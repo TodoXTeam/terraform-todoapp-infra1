@@ -16,11 +16,12 @@ module "storage_account" {
   depends_on = [module.rg]
   source     = "../../module/azurerm_storage_account"
 
-  sa_name = "stdevtodoapp17"   # 👈 Storage account name (globally unique hona chahiye)
-  rg_name = module.rg.rg_name
-  location = module.rg.rg_location
-  tags    = local.common_tags
+  sa_name     = "stdevtodoapp17"   # 👈 Storage account name (globally unique hona chahiye)
+  rg_name     = module.rg.rg_name
+  rg_location = module.rg.rg_location   # 👈 Fix: "rg_location" pass karna hoga
+  tags        = local.common_tags
 }
+
 
 
 module "acr" {
