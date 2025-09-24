@@ -7,3 +7,4 @@ echo "#my frist workflow working"> README.md
 echo "#my frist workflow running working"> README.md
 echo "#my frist workflow running done working"> README.md
 echo "#my frist workflow running done complete working"> README.md
+echo "#my frist workflow init plan sucessfullyy running"> README.md
